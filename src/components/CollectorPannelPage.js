@@ -54,20 +54,25 @@ class CollectorPannelPage extends Component {
     flatsDescription = (ev) => {
         ev.preventDefault()
         let today = new Date();
-        let date = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
-        let months = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        let date = today.toDateString();
+        let time = today.toLocaleTimeString();
+        let code = `${today.getFullYear()}${today.getDate()}${today.getMonth() + 1}${today.getSeconds()}${today.getMilliseconds()}`
+        console.log(code)
+
         let obj1 = {
-            flatNo: this.state.flatNo,
-            blockNo: this.state.blockNo
+            code: code,
         }
         let obj2 = {
+            blockNo: this.state.blockNo,
+            flatNo: this.state.flatNo,
             paymentRecieved: this.state.paymentRecieved,
             date: date,
+            time: time,
             name: this.state.userName
         }
         // console.log(obj2.date)
         const firebaseRef = firebase.database().ref();
-        firebaseRef.child(this.state.uid).child("Year" + today.getFullYear()).child(obj1.blockNo).child(obj1.flatNo).child("/recieved").set(obj2)
+        firebaseRef.child(this.state.uid).child("DataEntry").child(obj1.code).set(obj2)
         this.props.openHiddenDiv("Payment Added")
         setTimeout(() => {
 

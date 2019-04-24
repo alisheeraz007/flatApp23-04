@@ -15,7 +15,7 @@ class FlatsBalancePage extends Component {
     }
 
     gettingBlocksAndFlats() {
-        firebase.database().ref().child(this.state.uid).child("Year2019").once('value').then((snap) => {
+        firebase.database().ref().child(this.state.uid).child("FlatsBalance").once('value').then((snap) => {
             // console.log(snap.val())
             let wholeData = snap.val()
             let dataValue = Object.values(wholeData)
@@ -34,9 +34,9 @@ class FlatsBalancePage extends Component {
     authStateChange = () => {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                // if (!this.props.state.adminConfimation) {
-                //     // this.props.history.push("/MainDashBoard")
-                // }
+                if (!this.props.state.adminConfimation) {
+                    this.props.history.push("/MainDashBoard")
+                }
                 // User is signed in.
                 var uid = user.uid;
                 console.log(uid)
@@ -48,9 +48,9 @@ class FlatsBalancePage extends Component {
                 })
                 // ...
             }
-            // else {
-            //     this.props.history.push("/")
-            // }
+            else {
+                this.props.history.push("/")
+            }
         })
     }
 
@@ -95,16 +95,21 @@ class FlatsBalancePage extends Component {
                                         <div id={"mainDropDown" + index} className="dropDownDivShow" >
                                             <div className="dropDownMain">
                                                 <div id={"BlockNoDiv" + index} className="BlockNoDiv">
-                                                    <button onClick={() => this.buttonDisplayToggle(index)} className="dropDown" >{block}</button>
+                                                    <button
+                                                        onClick={() => this.buttonDisplayToggle(index)}
+                                                        className="dropDown"
+                                                    >
+                                                        {block}
+                                                    </button>
                                                 </div>
                                                 <div id={"totalButton" + index} className="totalButton">
                                                     {Object.values(this.state.dataValue[index]).map((flat) => {
                                                         return (
                                                             <div className="flatDiv">
                                                                 <button
-                                                                    name={flat.recievable.flatNo}
+                                                                    name={flat.flatNo}
                                                                     onClick={(ev) => { this.gettingFlatsNo(ev) }}>
-                                                                    {flat.recievable.flatNo}
+                                                                    {flat.flatNo}
                                                                 </button>
                                                             </div>
                                                         )

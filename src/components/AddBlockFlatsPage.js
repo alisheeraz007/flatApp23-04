@@ -50,6 +50,10 @@ class AddBlockFlatsPage extends Component {
     flatsDescription = (ev) => {
         ev.preventDefault()
         let today = new Date();
+        console.log(today.toDateString())
+        console.log(today.toLocaleTimeString())
+        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        console.log(time)
         let date = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
         let months = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
@@ -58,13 +62,15 @@ class AddBlockFlatsPage extends Component {
             blockNo: this.state.blockNo
         }
         let obj2 = {
+            blockNo: this.state.blockNo,
             previousBalance: this.state.previousBalance,
-            date: date,
+            date: today.toDateString(),
+            time: today.toLocaleTimeString(),
             flatNo: this.state.flatNo,
         }
         // console.log(obj2.date)
         const firebaseRef = firebase.database().ref();
-        firebaseRef.child(this.state.uid).child("Year" + today.getFullYear()).child(obj1.blockNo).child(obj1.flatNo).child("/recievable").set(obj2)
+        firebaseRef.child(this.state.uid).child("FlatsBalance").child(obj1.blockNo).child(obj1.flatNo).set(obj2)
         this.props.openHiddenDiv("Added")
         setTimeout(() => {
 
